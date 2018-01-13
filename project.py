@@ -24,24 +24,55 @@ app = Flask(__name__)
 def showHomePage():
     return "This will be the homepage of my MadLibs App"
 
-@app.route('/create')
+@app.route('/createstory', methods=['GET', 'POST'])
 def createStory():
-    return "This is where you will create the Mad Lib (Enter the Story)"
+    if request.method == 'POST':
+      newStory = Story(title = request.form['title'], description = request.form['description'], text = request.form['text'])
+      session.add(newStory)
+      session.commit()
+      numberOfBlanks = newStory.text.count('{')
+      return render_template('addWords.html', story_id = newStory.id, number_of_blanks = numberOfBlanks)
+    # If it is a get request render the template with the form
+    else:
+        return render_template('createStory.html')
 
 
-@app.route('/addwords')
-def addWords():
-    return "This is where you will add the words for a certain story"
-
+@app.route('/addwords/<int:story_id>/<int:number_of_blanks>)')
+def addWords(story_id, number_of_blanks):
+    print(story_id)
+    print(number_of_blanks)
 
 @app.route('/stories')
 def showStories():
-    return "This is where you will see the stories that other users have created"
+    stories = session.query(Story).all()
+    return render_template('stories.html', stories = stories)
 
 
-@app.route('/viewstory')
-def viewStory():
-    return "This is where you will see a specific story that a user has create"
+@app.route('/viewstory/<int:story_id>')
+def viewStory(story_id):
+    # Get the specific story that the user clicked on from the database
+    story = session.query(Story).filter_by(id=story_id).one()
+    
+    # Get the specific words related to this story that the user clicked on
+    words = session.query(Word).filter_by(story_id=story_id).all()
+
+    stringStory = story.text
+    listOfWords = []
+
+    # Loop through the words all of the database rows returned and add each word to a list
+    for word in words:
+    	listOfWords.append(word.word)
+    
+    # Change the listOfWords into a tuple so that I can pass it into .format()
+    tupleList = tuple(listOfWords)
+    
+    # Create the complete story using .format() the * unpacks the tuple to prevent index out of range error
+    exampleStory = stringStory.format(*tupleList)
+    
+    print(exampleStory)
+    
+    return render_template('story.html', story = story, exampleStory = exampleStory)
+
 
 @app.route('/editstory')
 def editStory():

@@ -11,6 +11,12 @@ Base = declarative_base()
 class Story(Base):
 	__tablename__ = 'story'
 	
+	title = Column(
+		String(80), nullable = False)
+
+	description = Column(
+		String(80), nullable = False)
+
 	text = Column(
 		String(80), nullable = False)
 

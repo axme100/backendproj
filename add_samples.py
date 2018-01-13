@@ -20,7 +20,7 @@ session = DBSession()
 
 
 #Add first example story
-story1 = Story(text = "Una vez fui al {} para buscarme un buen de {}")
+story1 = Story(title = "Ejemplo 1", description = "Esta es una historia muy interesante", text = "Una vez fui al {} para buscarme un buen de {}")
 
 session.add(story1)
 session.commit()
@@ -38,7 +38,7 @@ session.commit()
 
 
 #Add second example story
-story2 = Story(text = "Cuantos {} puedes comer. Yo solo puedo comer {}")
+story2 = Story(title = "Example 2", description = "Esta es una historia muy aburrida", text = "Cuantos {} puedes comer. Yo solo puedo comer {}")
 
 session.add(story2)
 session.commit()

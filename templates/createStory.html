@@ -1,0 +1,17 @@
+<html>
+<head>
+	<body>
+		<h1> Agrega su MadLib aquí </h1>
+		<form action="{{ url_for('createStory')}}" method='post'>
+			<div>
+				<input name="title" id="title" placeholder="titulo">
+				<input name="description" id="description" placeholder="descripción">
+			</div>
+			<div>
+				<textarea rows="20" cols="80" name="text" id="text" placeholder="tu madlib"></textarea>
+			</div>
+			<input type="submit" name="mandar">
+		</form> 
+	</body>
+</head>
+</html>
