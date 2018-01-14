@@ -1,3 +1,14 @@
 <html>
-<p> YOu made it </p>
+<h1> Story Title: {{newStory.title}} </h1>
+<p>{{newStory.text}}</p>
+	{% for word in range(number_of_blanks) %}
+    <input name="" id="" type="text" placeholder="your word">
+	<select name="lexical_category" id="selection">
+	    <option value="msn">Masculine Singular noun</option>
+	    <option value="mpn">Masculine Plural noun</option>
+	    <option value="fsn">Feminine Singular Noun</option>
+	    <option value="fpn">Feminine Plural Noun</option>
+  	</select>
+  	<br>
+    {% endfor %}
 </html>

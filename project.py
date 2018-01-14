@@ -31,7 +31,7 @@ def createStory():
       session.add(newStory)
       session.commit()
       numberOfBlanks = newStory.text.count('{')
-      return render_template('addWords.html', story_id = newStory.id, number_of_blanks = numberOfBlanks)
+      return render_template('addWords.html', newStory = newStory, number_of_blanks = numberOfBlanks)
     # If it is a get request render the template with the form
     else:
         return render_template('createStory.html')
