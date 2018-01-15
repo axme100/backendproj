@@ -37,10 +37,24 @@ def createStory():
         return render_template('createStory.html')
 
 
-@app.route('/addwords/<int:story_id>/<int:number_of_blanks>)')
+@app.route('/addwords/<int:story_id>/<int:number_of_blanks>', methods=['GET', 'POST'])
 def addWords(story_id, number_of_blanks):
-    print(story_id)
-    print(number_of_blanks)
+    if request.method == 'POST':
+        data = request.form
+        dataDict = data.to_dict()
+        print(dataDict)
+        # At this point I have all the data in a nice dictionary form
+        # I just need to loop through it pull out the corresponding word
+        # and lexical_category values, and add them to the database.
+        for key, value in dataDict.items():
+            if key.startswith("word"):
+                # Until I can find a solution that gives the numbers on the end of the string, I would only allow me to add up to 9 different words at at time.
+                newWord = Word(word = value, lexical_category = dataDict["lexical_category" + str(key[-1])], story_id = story_id)
+                session.add(newWord)
+                session.commit()
+
+    return "Did it work?"
+
 
 @app.route('/stories')
 def showStories():
