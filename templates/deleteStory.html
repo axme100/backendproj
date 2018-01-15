@@ -1,0 +1,13 @@
+<html>
+<body>
+<h1> Are you sure you want to delete {{story_id}}? </h1>
+
+<form action="{{url_for('deleteStory', story_id = story_id)}}" method = 'post'>
+
+<input type='submit', value = 'Delete'>
+
+</form>
+
+<a href = "{{url_for('showStories')}}"> Cancel </a>
+</body>
+</html>

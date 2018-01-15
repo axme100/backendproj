@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def showHomePage():
-    return "This will be the homepage of my MadLibs App"
+    return render_template('homePage.html')
 
 @app.route('/createstory', methods=['GET', 'POST'])
 def createStory():
@@ -93,9 +93,17 @@ def editStory():
     return "This is where you will edit a story: I can render similar templates to the create story"
 
 
-@app.route('/deletestory')
-def deleteStory():
-    return "This will be a confirmation page to make sure that users want to delete their stories"
+@app.route('/deletestory/<int:story_id>', methods=['GET', 'POST'])
+def deleteStory(story_id):
+    if request.method == 'POST':
+        deletedWords = session.query(Word).filter_by(id = story_id).all()
+        deletedStory = session.query(Story).filter_by(id = story_id).one()
+        session.delete(deletedStory)
+        for word in deletedWords:
+            session.delete(word)
+        session.commit()
+        return redirect(url_for('showStories'))
+    return render_template('deleteStory.html', story_id = story_id)
 
 
 if __name__ == '__main__':

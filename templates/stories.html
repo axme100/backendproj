@@ -5,6 +5,8 @@
 				<h1>Title: {{story.title}}</h1>
 				<h2>Description: {{story.description}}</h2>
 				<a href = "{{url_for('viewStory', story_id = story.id)}}"> View Story </a>
+				<br>
+				<a href = "{{url_for('deleteStory', story_id = story.id)}}"> Delete Story </a>
 				<p>------------------------</p>
 			{% endfor %}
 		</body>
