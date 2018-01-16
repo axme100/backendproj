@@ -1,0 +1,15 @@
+<html>
+<head>
+	<body>
+		<h1> Welcome to the Edit Page </h1>
+		<h2> Story to edit: {{storyToEdit.title}}
+		<h3> Story: {{storyToEdit.text}} </h3>
+		{% for word in wordsToEdit %}
+			<p> {{word.word}} </p>
+			<br>
+			<p>{{word.lexical_category}}</p>
+		{% endfor %}
+
+	</body>
+</head>
+</html>

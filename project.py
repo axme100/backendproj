@@ -53,7 +53,7 @@ def addWords(story_id, number_of_blanks):
                 session.add(newWord)
                 session.commit()
 
-    return "Did it work?"
+    return redirect(url_for('showStories'))
 
 
 @app.route('/stories')
@@ -88,9 +88,42 @@ def viewStory(story_id):
     return render_template('story.html', story = story, exampleStory = exampleStory)
 
 
-@app.route('/editstory')
-def editStory():
-    return "This is where you will edit a story: I can render similar templates to the create story"
+@app.route('/editstory/<int:story_id>', methods=['GET', 'POST'])
+def editStory(story_id):
+    # I think the best thing to do for this would be to pull out the story and each of the words.
+    # Onto a single page. You can click on each word to either edit or delete and edit and delete the story as you see fit.
+    # There will just have to be some warning that either (in the best of cases or later)
+    # doesn't let you submit the forms until the number of blanks matches the number of wordor, or,
+    # just tells the user (maybe for now), that they have to have the same amount of blanks as words (in the same order) if they don't want an error.
+    
+    storyToEdit = session.query(Story).filter_by(id = story_id).one()
+    wordsToEdit = session.query(Word).filter_by(story_id = story_id).group_by(Word.id).all()
+    
+
+    return render_template('editStory.html', storyToEdit = storyToEdit, wordsToEdit = wordsToEdit)
+
+
+
+
+
+    '''
+    @app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit/', methods=['GET', 'POST'])
+def editMenuItem(restaurant_id, menu_id):
+    editedItem = session.query(MenuItem).filter_by(id = menu_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        session.add(editedItem)
+        session.commit()
+        flash("Menu Item Edited")
+        return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
+    else:
+        #USE THE RENDER_TEMPLATE FUNCTION BELOW TO SEE THE VARIABLES YOU SHOULD USE IN YOUR EDITMENUITEM TEMPLATE
+        return render_template('edit_menu_item.html', restaurant_id = restaurant_id, MenuID = menu_id, item = editedItem)
+
+
+    # This is how I did it with the REST APP for referene
+    '''
 
 
 @app.route('/deletestory/<int:story_id>', methods=['GET', 'POST'])
