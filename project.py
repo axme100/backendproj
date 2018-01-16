@@ -46,13 +46,12 @@ def addWords(story_id, number_of_blanks):
         # At this point I have all the data in a nice dictionary form
         # I just need to loop through it pull out the corresponding word
         # and lexical_category values, and add them to the database.
-        for key, value in dataDict.items():
-            if key.startswith("word"):
-                # Until I can find a solution that gives the numbers on the end of the string, I would only allow me to add up to 9 different words at at time.
-                newWord = Word(word = value, lexical_category = dataDict["lexical_category" + str(key[-1])], story_id = story_id)
-                session.add(newWord)
-                session.commit()
-
+        
+        for item in range(number_of_blanks):
+            newWord = Word(word = dataDict["word" + str(item)], lexical_category = dataDict["lexical_category" + str(item)], story_id = story_id)
+            session.add(newWord)
+            session.commit()
+               
     return redirect(url_for('showStories'))
 
 
@@ -76,7 +75,7 @@ def viewStory(story_id):
     # Loop through the words all of the database rows returned and add each word to a list
     for word in words:
     	listOfWords.append(word.word)
-    
+
     # Change the listOfWords into a tuple so that I can pass it into .format()
     tupleList = tuple(listOfWords)
     
@@ -97,7 +96,7 @@ def editStory(story_id):
     # just tells the user (maybe for now), that they have to have the same amount of blanks as words (in the same order) if they don't want an error.
     
     storyToEdit = session.query(Story).filter_by(id = story_id).one()
-    wordsToEdit = session.query(Word).filter_by(story_id = story_id).group_by(Word.id).all()
+    wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
     
 
     return render_template('editStory.html', storyToEdit = storyToEdit, wordsToEdit = wordsToEdit)
