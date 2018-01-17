@@ -42,7 +42,6 @@ def addWords(story_id, number_of_blanks):
     if request.method == 'POST':
         data = request.form
         dataDict = data.to_dict()
-        print(dataDict)
         # At this point I have all the data in a nice dictionary form
         # I just need to loop through it pull out the corresponding word
         # and lexical_category values, and add them to the database.
@@ -93,29 +92,43 @@ def editStory(story_id):
     # There will just have to be some warning that either (in the best of cases or later)
     # doesn't let you submit the forms until the number of blanks matches the number of wordor, or,
     # just tells the user (maybe for now), that they have to have the same amount of blanks as words (in the same order) if they don't want an error.
-    
     storyToEdit = session.query(Story).filter_by(id = story_id).one()
     wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
+    if request.method == 'POST':
+        storyToEdit.text = request.form['text']
+        storyToEdit.title = request.form['title']
+        storyToEdit.description = request.form['description']
+        session.add(storyToEdit)
+        session.commit()
+        numberOfBlanks = storyToEdit.text.count('{')
+        return redirect(url_for('editWords', number_of_blanks = numberOfBlanks, story_id = story_id))
+
+   
     return render_template('editStory.html', storyToEdit = storyToEdit, wordsToEdit = wordsToEdit)
 
-    '''
-    @app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit/', methods=['GET', 'POST'])
-def editMenuItem(restaurant_id, menu_id):
-    editedItem = session.query(MenuItem).filter_by(id = menu_id).one()
+@app.route('/editwords/<int:story_id>/<int:number_of_blanks>', methods=['GET', 'POST'])
+def editWords(story_id, number_of_blanks):
+    
+    editedStory = session.query(Story).filter_by(id = story_id).one()
+    wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
     if request.method == 'POST':
-        if request.form['name']:
-            editedItem.name = request.form['name']
-        session.add(editedItem)
-        session.commit()
-        flash("Menu Item Edited")
-        return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
-    else:
-        #USE THE RENDER_TEMPLATE FUNCTION BELOW TO SEE THE VARIABLES YOU SHOULD USE IN YOUR EDITMENUITEM TEMPLATE
-        return render_template('edit_menu_item.html', restaurant_id = restaurant_id, MenuID = menu_id, item = editedItem)
+        
+        # This is the same code from the delete words function
+        for word in wordsToEdit:
+            session.delete(word)
+            session.commit()
 
-
-    # This is how I did it with the REST APP for referene
-    '''
+        # This is the same code from the add words function
+        data = request.form
+        dataDict = data.to_dict()
+        
+        for item in range(number_of_blanks):
+            newWord = Word(word = dataDict["word" + str(item)], lexical_category = dataDict["lexical_category" + str(item)], story_id = story_id)
+            session.add(newWord)
+            session.commit()     
+        return redirect(url_for('showStories'))
+    
+    return render_template('editWords.html', editedStory = editedStory, old_words = wordsToEdit, number_of_blanks = number_of_blanks)
 
 
 @app.route('/deletestory/<int:story_id>', methods=['GET', 'POST'])

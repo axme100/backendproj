@@ -1,0 +1,31 @@
+<html>
+<h1> Story Title: {{ editedStory.title }} </h1>
+<p>{{ editedStory.text }}</p>
+<h1> Add New Words Here: </h1>
+	<form action="{{ url_for('editWords', number_of_blanks = number_of_blanks, story_id = editedStory.id)}}" method='post'>
+		{% for word in range(number_of_blanks) %}
+		    <input name="word{{range(number_of_blanks)[word]}}" id="word" type="text" value="">
+			<select name="lexical_category{{range(number_of_blanks)[word]}}" id="selection" value="">
+			    <option value="msn">Masculine Singular noun</option>
+			    <option value="mpn">Masculine Plural noun</option>
+			    <option value="fsn">Feminine Singular Noun</option>
+			    <option value="fpn">Feminine Plural Noun</option>
+		  	</select>
+		  	<br>
+	    {% endfor %}
+	<input type="submit" name="mandar">
+	</form>
+	<h1> Here are your old words </h1>
+	<table>
+	  	<tr>
+	    <th>word<br></th>
+	    <th>lexical_category</th>
+	  	</tr>
+		{% for word in old_words %}
+		<tr>
+	    <td>{{word.word}}</td>
+	    <td>--------{{word.lexical_category}}</td>
+	  	</tr>
+		{% endfor %}
+	</table>
+</html>
