@@ -1,15 +1,14 @@
-<html>
-<head>
-	<body>
-		<h1> Welcome to the Edit Page </h1>
-		<h2> Story to edit: {{storyToEdit.title}}
-		<h3> Story: {{storyToEdit.text}} </h3>
-		{% for word in wordsToEdit %}
-			<p> {{word.word}} </p>
-			<br>
-			<p>{{word.lexical_category}}</p>
-		{% endfor %}
-
-	</body>
-</head>
-</html>
+<!-- This is where users will replace the story with something !-->
+<h1> Edit Story: {{storyToEdit.title}} </h1>
+<h2> Edit your story below </h2>
+		<form action="{{url_for('editStory', story_id = storyToEdit.id)}}" method='post'>
+			<div>
+				<input name="title" id="title" value = "{{storyToEdit.title}}">
+				<input name="description" id="description" value="{{storyToEdit.description}}">
+			</div>
+			<div>
+				<!-- Shout out to: https://stackoverflow.com/questions/20941272/value-attribute-in-textarea-bootstrap-3 !-->
+				<textarea rows="20" cols="80" name="text" id="text">{{storyToEdit.text}}</textarea>
+			</div>
+			<input type="submit" name="mandar">
+		</form> 

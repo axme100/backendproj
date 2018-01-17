@@ -86,7 +86,6 @@ def viewStory(story_id):
     
     return render_template('story.html', story = story, exampleStory = exampleStory)
 
-
 @app.route('/editstory/<int:story_id>', methods=['GET', 'POST'])
 def editStory(story_id):
     # I think the best thing to do for this would be to pull out the story and each of the words.
@@ -97,13 +96,7 @@ def editStory(story_id):
     
     storyToEdit = session.query(Story).filter_by(id = story_id).one()
     wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
-    
-
     return render_template('editStory.html', storyToEdit = storyToEdit, wordsToEdit = wordsToEdit)
-
-
-
-
 
     '''
     @app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit/', methods=['GET', 'POST'])
