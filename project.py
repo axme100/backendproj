@@ -179,6 +179,8 @@ def showHomePage():
 
 @app.route('/createstory', methods=['GET', 'POST'])
 def createStory():
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'POST':
       newStory = Story(title = request.form['title'], description = request.form['description'], text = request.form['text'], user_id = login_session['user_id'])
       session.add(newStory)
