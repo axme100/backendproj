@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, make_response
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Story, Word
+from database_setup import Base, Story, Word, User
 from flask import session as login_session
 import random, string
 from oauth2client.client import flow_from_clientsecrets
@@ -19,6 +19,30 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
+
+
+# Helper functions to implement user system
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -94,11 +118,10 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    # This comes later when I actually want to store the user ID in the database.
-    #user_id = getUserID(data['email'])
-    #if not user_id:
-    #  user_id = createUser(login_session)
-    #  login_session['user_id'] = user_id
+    user_id = getUserID(data['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+        login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -157,7 +180,7 @@ def showHomePage():
 @app.route('/createstory', methods=['GET', 'POST'])
 def createStory():
     if request.method == 'POST':
-      newStory = Story(title = request.form['title'], description = request.form['description'], text = request.form['text'])
+      newStory = Story(title = request.form['title'], description = request.form['description'], text = request.form['text'], user_id = login_session['user_id'])
       session.add(newStory)
       session.commit()
       numberOfBlanks = newStory.text.count('{')
@@ -177,7 +200,7 @@ def addWords(story_id, number_of_blanks):
         # and lexical_category values, and add them to the database.
         
         for item in range(number_of_blanks):
-            newWord = Word(word = dataDict["word" + str(item)], lexical_category = dataDict["lexical_category" + str(item)], story_id = story_id)
+            newWord = Word(word = dataDict["word" + str(item)], lexical_category = dataDict["lexical_category" + str(item)], story_id = story_id, user_id = login_session['user_id'])
             session.add(newWord)
             session.commit()
                
@@ -194,7 +217,8 @@ def showStories():
 def viewStory(story_id):
     # Get the specific story that the user clicked on from the database
     story = session.query(Story).filter_by(id=story_id).one()
-    
+    user = session.query(User).filter_by(id = story.user_id).one()
+
     # Get the specific words related to this story that the user clicked on
     words = session.query(Word).filter_by(story_id=story_id).all()
 
@@ -213,7 +237,7 @@ def viewStory(story_id):
     
     print(exampleStory)
     
-    return render_template('story.html', story = story, exampleStory = exampleStory)
+    return render_template('story.html', story = story, exampleStory = exampleStory, user_email = user.email)
 
 @app.route('/editstory/<int:story_id>', methods=['GET', 'POST'])
 def editStory(story_id):
