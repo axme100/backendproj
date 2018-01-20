@@ -241,6 +241,7 @@ def viewStory(story_id):
     
     # Although I'm not sue if this is going tow work because there is not necessarily any login session
     # that has been initiated, as the instructor does on the video.
+    # It looks like it properly renders the correct template.
     if 'username' not in login_session or creator.id != login_session['user_id']:
         return render_template('publicStory.html', story = story, exampleStory = exampleStory, user_email = user.email)
     else:

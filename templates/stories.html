@@ -6,11 +6,8 @@
 				<h2>Description: {{story.description}}</h2>
 				<a href = "{{url_for('viewStory', story_id = story.id)}}"> View Story </a>
 				<br>
-				<a href = "{{url_for('deleteStory', story_id = story.id)}}"> Delete Story </a>
-				<br>
-				<a href = "{{url_for('editStory', story_id = story.id)}}"> Edit Story </a>
-				<p>------------------------</p>
 			{% endfor %}
+				<a href="{{url_for('showHomePage')}}"> Return to Main Menu </a>
 		</body>
 	</head>
 </html>

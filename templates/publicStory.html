@@ -4,10 +4,11 @@
 				<h1>{{story.title}}</h1>
 				<h2>Description: {{story.description}}</h2>
 				<h3> Created by: {{user_email}}
-				<h5> Here is your Mad Lib String: </h5>
+				<h5> Here is the Mad Lib String: </h5>
 				<p>{{story.text}}</p>
-				<h5> Here is your Mad Lib With Example Words:</h5>
+				<h5> Here is the Mad Lib With Example the Words:</h5>
 				<p>{{exampleStory}}</p>
+				<a href="{{url_for('showStories')}}"> Go Back </a>
 		</body>
 	</head>
 </html>
