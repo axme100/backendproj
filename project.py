@@ -237,9 +237,14 @@ def viewStory(story_id):
     # Create the complete story using .format() the * unpacks the tuple to prevent index out of range error
     exampleStory = stringStory.format(*tupleList)
     
-    print(exampleStory)
+    creator = getUserInfo(story.user_id)
     
-    return render_template('story.html', story = story, exampleStory = exampleStory, user_email = user.email)
+    # Although I'm not sue if this is going tow work because there is not necessarily any login session
+    # that has been initiated, as the instructor does on the video.
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('publicStory.html', story = story, exampleStory = exampleStory, user_email = user.email)
+    else:
+        return render_template('story.html', story = story, exampleStory = exampleStory, user_email = user.email)
 
 @app.route('/editstory/<int:story_id>', methods=['GET', 'POST'])
 def editStory(story_id):
@@ -249,7 +254,6 @@ def editStory(story_id):
     # doesn't let you submit the forms until the number of blanks matches the number of wordor, or,
     # just tells the user (maybe for now), that they have to have the same amount of blanks as words (in the same order) if they don't want an error.
     storyToEdit = session.query(Story).filter_by(id = story_id).one()
-    wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
     if request.method == 'POST':
         storyToEdit.text = request.form['text']
         storyToEdit.title = request.form['title']
@@ -260,7 +264,7 @@ def editStory(story_id):
         return redirect(url_for('editWords', number_of_blanks = numberOfBlanks, story_id = story_id))
 
    
-    return render_template('editStory.html', storyToEdit = storyToEdit, wordsToEdit = wordsToEdit)
+    return render_template('editStory.html', storyToEdit = storyToEdit)
 
 @app.route('/editwords/<int:story_id>/<int:number_of_blanks>', methods=['GET', 'POST'])
 def editWords(story_id, number_of_blanks):

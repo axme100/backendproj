@@ -1,6 +1,8 @@
 <html>
-<h1> Story Title: {{newStory.title}} </h1>
-<p>{{newStory.text}}</p>
+<h1> Add the Words For Your Mad Lib </h1>
+<h2> Story Title: {{newStory.title}} </h1>
+<h3>
+<h3> Story Entered {{newStory.text}}</h3>
 	<form action="{{ url_for('addWords', number_of_blanks = number_of_blanks, story_id = newStory.id)}}" method='post'>
 		{% for word in range(number_of_blanks) %}
 		    <input name="word{{range(number_of_blanks)[word]}}" id="word" type="text" placeholder="your word">

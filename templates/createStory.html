@@ -1,17 +1,24 @@
 <html>
 <head>
 	<body>
-		<h1> Agrega su MadLib aquí </h1>
+		<h1> Add your Mad Lib Here </h1>
 		<form action="{{ url_for('createStory')}}" method='post'>
 			<div>
-				<input name="title" id="title" placeholder="titulo">
-				<input name="description" id="description" placeholder="descripción">
+				<input name="title" id="title" placeholder="title">
+				<input name="description" id="description" placeholder="description">
 			</div>
 			<div>
-				<textarea rows="20" cols="80" name="text" id="text" placeholder="tu madlib"></textarea>
+				<textarea rows="20" cols="80" name="text" id="text" placeholder="your Mad Lib"></textarea>
 			</div>
 			<input type="submit" name="mandar">
 		</form> 
 	</body>
+	<h1> Instructions: <h1>
+	<p> To create a "blank space" please use square brackests. For example, if you enter "I went to the {}" that would be the equivelant to a one-sentence Mad Lib: 
+
+		I went to the _______
+
+	You will be prompted to identify the part of speech (lexical_category) of the blank space as well as an example word upon submitting your stroy.
+
 </head>
 </html>
