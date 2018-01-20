@@ -272,6 +272,12 @@ def editWords(story_id, number_of_blanks):
     
     editedStory = session.query(Story).filter_by(id = story_id).one()
     wordsToEdit = session.query(Word).filter_by(story_id = story_id).all()
+    
+    if 'username' not in login_session:
+        return redirect('/login')
+    if editedStory.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit the words of this story.');}</script><body onload='myFunction()''>"
+
     if request.method == 'POST':
         
         # This is the same code from the delete words function
@@ -294,16 +300,19 @@ def editWords(story_id, number_of_blanks):
 
 @app.route('/deletestory/<int:story_id>', methods=['GET', 'POST'])
 def deleteStory(story_id):
+    deletedWords = session.query(Word).filter_by(id = story_id).all()
+    deletedStory = session.query(Story).filter_by(id = story_id).one()
+    if 'username' not in login_session:
+        return redirect('/login')
+    if deletedStory.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        deletedWords = session.query(Word).filter_by(id = story_id).all()
-        deletedStory = session.query(Story).filter_by(id = story_id).one()
         session.delete(deletedStory)
         for word in deletedWords:
             session.delete(word)
         session.commit()
         return redirect(url_for('showStories'))
     return render_template('deleteStory.html', story_id = story_id)
-
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
