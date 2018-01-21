@@ -1,6 +1,6 @@
 # Spanlib
 
-This project aims to create a pedagogical web applciation that can be used in Spanish language classrooms or by students of Spanish and other languages around the world.
+This project aims to create a pedagogical web applciation for creating Mad Libs in the Spanish language classroom or by students of Spanish and other languages around the world.
 
 ## Getting Started
 
