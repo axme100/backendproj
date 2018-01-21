@@ -39,8 +39,10 @@ class Story(Base):
 		# Returns object data in easily serializeable format
 
 		return {
-			'story' : self.story,
-			'id' : self.id,
+			'title' : self.title,
+			'description' : self.description,
+			'text' : self.text,
+			'id' : self.id
 		}
 
 class Word(Base):
@@ -62,9 +64,10 @@ class Word(Base):
 
 		return {
 			'word' : self.word,
-			'description' : self.lexical_category,
+			'lexical_category' : self.lexical_category,
 			'id' : self.id,
 			'story_id' : self.story_id,
+			'user_id' : self.user_id
 		}
 
 engine = create_engine(
