@@ -24,7 +24,7 @@ class User(Base):
 
     # Takes a password in as an argument and return true if it's correct.
     def verify_password(self, password):
-    	return pwd_context.verify(password, self.password.hash)
+    	return pwd_context.verify(password, self.password_hash)
 
 
 class Story(Base):
