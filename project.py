@@ -44,6 +44,7 @@ def verify_password(username, password):
     return True
 
 
+# This method creates a new user, who can make API calls.
 @app.route('/api/users', methods=['POST'])
 def new_user():
     username = request.json.get('username')
@@ -62,6 +63,7 @@ def new_user():
     {'Location': url_for('get_user', id=user.id, _external=True)}
 
 
+# This method will return JSON information of a user if they exist.
 @app.route('/api/users/<int:id>')
 def get_user(id):
     user = session.query(User).filter_by(id=id).one()
@@ -70,6 +72,7 @@ def get_user(id):
     return jsonify({'username': user.username})
 
 
+# This is an API endpoint that will return all stories
 @app.route('/stories/JSON')
 @auth.login_required
 def storiesJSON():
@@ -77,6 +80,7 @@ def storiesJSON():
     return jsonify(story=[i.serialize for i in stories])
 
 
+# This is an API endpoint that willr return all words
 @app.route('/words/JSON')
 @auth.login_required
 def wordsJSON():
@@ -84,7 +88,7 @@ def wordsJSON():
     return jsonify(Word=[i.serialize for i in words])
 
 
-# Helper functions to implement user system
+# The next three functions are helpers to implement user system
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
@@ -107,6 +111,7 @@ def getUserID(email):
         return None
 
 
+# This is to get userinformation from Google
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -201,6 +206,7 @@ def gconnect():
     return output
 
 
+# This disconnects from Google
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
@@ -260,6 +266,8 @@ def createStory():
             user_id=login_session['user_id'])
         session.add(newStory)
         session.commit()
+        # This counts number of blanks intended for Mad Lib
+        # This can and should be made more robust (see readme)
         numberOfBlanks = newStory.text.count('{')
         return render_template(
             'addWords.html',
