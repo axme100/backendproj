@@ -19,9 +19,11 @@ You will need to add your Google API credentials as a file named client_secrets.
 In order to access the API end points `stories/JSON` and `words/JSON` which will respectively provide all of the words and stories in the database, you must create an account. To do this, you will need to send a POST request to the `/api/users` route.
 
 For example, use curl on the command line as so: 
+
 `curl -i -X POST -H "Content-Type: application/json" -d '{"username":"Max","password":"testpassword","name":"max","email":"max@max.com"}' http://localhost:8000/api/users`
 
-Now, when sending GET requets to the API endpoints: `stories/JSON` and `words/JSON` make sure to provide your username and password.
+
+Now, when sending GET requets to the API endpoints: `stories/JSON` and `words/JSON` make sure to provide your username and password that were created witht he previous commands
 
 For example, use using curl as so:
 ```curl -u Max:testpassword -i -X GET http://localhost:8000/words/JSON``` will return all of the words in the database
