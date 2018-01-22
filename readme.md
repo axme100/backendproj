@@ -49,4 +49,5 @@ As of now the create story method relies on `numberOfBlanks = newStory.text.coun
 ### Incorporate more linguistic theory
 As of now, users are only able to select different nouns. This will be expanded to cover many more lexical categories.
 
-### Add a play Mad Lib function. This is where users will be able to actually "play" the Mad Libs that are in the database. This will probably be the most important component of this app once it is created.
+## Add a play Mad Lib function.
+This is where users will be able to actually "play" the Mad Libs that are in the database. This will probably be the most important component of this app once it is created.
