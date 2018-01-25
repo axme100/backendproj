@@ -4,8 +4,8 @@
 <h1> Add New Words Here: </h1>
 	<form action="{{ url_for('editWords', number_of_blanks = number_of_blanks, story_id = editedStory.id)}}" method='post'>
 		{% for word in range(number_of_blanks) %}
-		    <input name="word{{range(number_of_blanks)[word]}}" id="word" type="text" value="">
-			<select name="lexical_category{{range(number_of_blanks)[word]}}" id="selection" value="">
+		    <input name="word{{range(number_of_blanks)[word]}}" type="text" value="">
+			<select name="lexical_category{{range(number_of_blanks)[word]}}" value="">
 			    <option value="msn">Masculine Singular noun</option>
 			    <option value="mpn">Masculine Plural noun</option>
 			    <option value="fsn">Feminine Singular Noun</option>

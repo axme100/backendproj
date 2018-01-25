@@ -3,12 +3,12 @@
 <h2> Edit your story below </h2>
 		<form action="{{url_for('editStory', story_id = storyToEdit.id)}}" method='post'>
 			<div>
-				<input name="title" id="title" value = "{{storyToEdit.title}}">
-				<input name="description" id="description" value="{{storyToEdit.description}}">
+				<input name="title" value = "{{storyToEdit.title}}">
+				<input name="description" value="{{storyToEdit.description}}">
 			</div>
 			<div>
 				<!-- Shout out to: https://stackoverflow.com/questions/20941272/value-attribute-in-textarea-bootstrap-3 !-->
-				<textarea rows="20" cols="80" name="text" id="text">{{storyToEdit.text}}</textarea>
+				<textarea rows="20" cols="80" name="text">{{storyToEdit.text}}</textarea>
 			</div>
 			<input type="submit" name="mandar">
 		</form> 
