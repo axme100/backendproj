@@ -62,6 +62,7 @@ class Word(Base):
 	word = Column(String(80), nullable = False)
 	lexical_category = Column(String(80), nullable = False)
 	id = Column(Integer, primary_key = True)
+	order = Column(Integer, nullable = False)
 	story_id = Column(
 		Integer, ForeignKey('story.id'))
 	story = relationship(Story)

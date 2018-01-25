@@ -259,21 +259,30 @@ def createStory():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        newStory = Story(
-            title=request.form['title'],
-            description=request.form['description'],
-            text=request.form['text'],
-            user_id=login_session['user_id'])
-        session.add(newStory)
-        session.commit()
-        # This counts number of blanks intended for Mad Lib
-        # This can and should be made more robust (see readme)
-        numberOfBlanks = newStory.text.count('{')
-        return render_template(
-            'addWords.html',
-            newStory=newStory,
-            number_of_blanks=numberOfBlanks)
-    # If it is a get request render the template with the form
+        # It seems that when I was testing this app
+        # I was able to create stories and add them to the database
+        # without being logged in, then I was getting an error
+        # When I tried to view the story because there was no username
+        # associaed with that story.
+        # That is why I added this additional if session
+        if 'username' not in login_session:
+            return redirect('/login')
+        else:
+            newStory = Story(
+                title=request.form['title'],
+                description=request.form['description'],
+                text=request.form['text'],
+                user_id=login_session['user_id'])
+            session.add(newStory)
+            session.commit()
+            # This counts number of blanks intended for Mad Lib
+            # This can and should be made more robust (see readme)
+            numberOfBlanks = newStory.text.count('{')
+            return render_template(
+                'addWords.html',
+                newStory=newStory,
+                number_of_blanks=numberOfBlanks)
+        # If it is a get request render the template with the form
     else:
         return render_template('createStory.html')
 
@@ -293,7 +302,9 @@ def addWords(story_id, number_of_blanks):
             newWord = Word(
                 word=dataDict["word" + str(item)],
                 lexical_category=dataDict["lexical_category" + str(item)],
-                story_id=story_id, user_id=login_session['user_id'])
+                story_id=story_id,
+                user_id=login_session['user_id'],
+                order=item + 1)
             session.add(newWord)
             session.commit()
 
@@ -313,7 +324,8 @@ def viewStory(story_id):
     user = session.query(User).filter_by(id=story.user_id).one()
 
     # Get the specific words related to this story that the user clicked on
-    words = session.query(Word).filter_by(story_id=story_id).all()
+    words = session.query(Word).filter_by(
+        story_id=story_id).order_by('order').all()
 
     stringStory = story.text
     listOfWords = []
@@ -392,7 +404,8 @@ def editWords(story_id, number_of_blanks):
             newWord = Word(word=dataDict["word" + str(item)],
                            lexical_category=dataDict["lexical"
                            "_category" + str(item)],
-                           story_id=story_id)
+                           story_id=story_id,
+                           order=item + 1)
             session.add(newWord)
             session.commit()
         return redirect(url_for('showStories'))

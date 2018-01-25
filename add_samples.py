@@ -32,12 +32,12 @@ session.add(story1)
 session.commit()
 
 
-word1 = Word(word = "mago", lexical_category = "msn", story = story1)
+word1 = Word(word = "mago", lexical_category = "msn", story = story1, user_id = user1.id, order = 1)
 
 session.add(word1)
 session.commit()
 
-word2 = Word(word = "amigos", lexical_category = "msn", story = story1)
+word2 = Word(word = "amigos", lexical_category = "msn", story = story1, user_id = user1.id, order = 2)
 
 session.add(word2)
 session.commit()
@@ -50,13 +50,13 @@ session.add(story2)
 session.commit()
 
 
-word3 = Word(word = "mago", lexical_category = "msn", story = story2)
+word3 = Word(word = "mago", lexical_category = "msn", story = story2, user_id = user1.id, order = 1)
 
 session.add(word3)
 session.commit()
 
 
-word4 = Word(word = "dos", lexical_category = "número", story = story2)
+word4 = Word(word = "dos", lexical_category = "número", story = story2, user_id = user1.id, order = 2)
 
 session.add(word4)
 session.commit()
@@ -71,13 +71,13 @@ session.add(story3)
 session.commit()
 
 
-word5 = Word(word = "pizza", lexical_category = "msn", story = story3)
+word5 = Word(word = "pizza", lexical_category = "msn", story = story3, user_id = user1.id, order = 1)
 
 session.add(word5)
 session.commit()
 
 
-word6 = Word(word = "delicious", lexical_category = "number", story = story3)
+word6 = Word(word = "delicious", lexical_category = "number", story = story3, user_id = user1.id, order = 2)
 
 session.add(word6)
 session.commit()
